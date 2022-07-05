@@ -64,9 +64,14 @@ class Module:
 		self.printLine('[+] Connecting to ' + ip,bcolors.OKGREEN)
 		ans = c.sr1(ModbusADU(transId=getTransId(),unitId=int(self.options['UID'][0]))/ModbusPDU03_Read_Holding_Registers(startAddr=int(self.options['StartAddr'][0],16),quantity=int(self.options['Quantity'][0],16)),timeout=timeout, verbose=0)
 		ans = ModbusADU_Answer(bytes(ans))
+		fl = ""
+		for i in bytes(ans)[-4:]:
+			fl += "{:08b}".format(i)
+		fl = int(fl, 2)
+		fl = struct.unpack('f', struct.pack('i', fl))[0]
 		self.printLine('[+] Response is :',bcolors.OKGREEN)
 		ans.show()
-		
+		print(f"    registerVal={fl}")
 				
 
 		
