@@ -5,10 +5,10 @@
 2.更换了lib下的scapy和ipcalc文件为py3版本
 3.更换了loader中的imp为importlib
 修改如下
-spec = importlib.util.spec_from_file_location(name, self.path + item + '.py')
+```spec = importlib.util.spec_from_file_location(name, self.path + item + '.py')
             the_api = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(the_api)
-            self.modules.update({item:the_api.Module()})
+            self.modules.update({item:the_api.Module()})```
 
 2022.7.5修改记录
 
