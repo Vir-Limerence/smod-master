@@ -63,8 +63,8 @@ class Module:
 					sys.exit(0)
 		def restore_target(gatway_ip,gatway_mac,target_ip,target_mac):
 			print("[+] Restore ARP Tables")
-		    	send(ARP(op=2, pdst=gatway_ip, psrc=target_ip, hwdst="ff:ff:ff:ff:ff:ff", hwsrc=target_mac), count=3)
-		    	send(ARP(op=2, pdst=target_ip, psrc=gatway_ip, hwdst="ff:ff:ff:ff:ff:ff", hwsrc=gatway_mac), count=3)
+			send(ARP(op=2, pdst=gatway_ip, psrc=target_ip, hwdst="ff:ff:ff:ff:ff:ff", hwsrc=target_mac), count=3)
+			send(ARP(op=2, pdst=target_ip, psrc=gatway_ip, hwdst="ff:ff:ff:ff:ff:ff", hwsrc=gatway_mac), count=3)
 			with open('/proc/sys/net/ipv4/ip_forward', 'w') as ipf:
 				ipf.write('0\n')
 			os._exit(0)
@@ -94,7 +94,7 @@ class Module:
 			self.printLine('[+] Slave MAC: '+target_mac,bcolors.OKGREEN)
 		
 		def signal_handler(signal, frame):
-		        restore_target(gatway_ip,gatway_mac,target_ip,target_mac)
+			restore_target(gatway_ip,gatway_mac,target_ip,target_mac)
 			
 		signal.signal(signal.SIGINT, signal_handler)
 		poison_thread = threading.Thread(target = poison_target,args=(gatway_ip,gatway_mac,target_ip,target_mac))

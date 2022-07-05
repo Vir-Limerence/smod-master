@@ -47,9 +47,10 @@ class Command:
 			table.align  = 'l'
 			table.add_row(['-'*7,'-'*11])
 			for i in sorted(modules):
+				print(modules[i])
 				table.add_row([bcolors.OKBLUE + i + bcolors.ENDC,modules[i].info['Description']])
 
-			print(table		)
+			print(table)
 		if(args[1] == 'options'):
 			if(pointer):
 				table 	 = prettytable.PrettyTable([bcolors.BOLD + 'Name' + bcolors.ENDC,bcolors.BOLD + 'Current Setting' + bcolors.ENDC,bcolors.BOLD + 'Required' + bcolors.ENDC,bcolors.BOLD + 'Description' + bcolors.ENDC])
@@ -59,7 +60,7 @@ class Command:
 				for i in sorted(modules[pointer].options):
 					table.add_row([bcolors.OKBLUE +  i + bcolors.ENDC,modules[pointer].options[i][0],modules[pointer].options[i][1],modules[pointer].options[i][2]])
 
-				print(table			)
+				print(table)
 	def use(self,args,pointer = None):
 		global POINTER
 		if(len(args) < 2):

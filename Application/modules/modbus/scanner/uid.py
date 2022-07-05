@@ -65,7 +65,7 @@ class Module:
 				c.sr1(ModbusADU(transId=getTransId(),unitId=i)/ModbusPDU_Read_Generic(funcCode=1),timeout=timeout, verbose=0)
 				self.printLine('[+] UID on ' + ip + ' is : ' + str(i),bcolors.OKGREEN)
 				closeConnectionToTarget(c)
-			except Exception,e:
+			except Exception as e:
 				closeConnectionToTarget(c)
 				pass
 

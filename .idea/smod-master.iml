@@ -5,6 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/System" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/System/Core" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/System/Lib" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/System/Lib/scapy" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
