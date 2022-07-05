@@ -1,3 +1,8 @@
+# 注明
+本仓库是基于原有仓库smater-smod的改动，我们可以在python3下运行该仓库
+
+
+
 # smod
 smod is a modular framework with every kind of diagnostic and offensive feature you could need in order to pentest modbus protocol. It is a full Modbus protocol implementation using Python and Scapy. This software could be run on Linux/OSX under python 2.7.x. 
 
