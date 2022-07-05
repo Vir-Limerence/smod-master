@@ -66,7 +66,7 @@ class Module:
 			c = connectToTarget(ip,self.options['RPORT'][0])
 			self.printLine('[+] Address is ' + str(hex(i)),bcolors.OKGREEN)
 			ans = c.sr1(ModbusADU(transId=getTransId(),unitId=int(self.options['UID'][0]))/ModbusPDU01_Read_Coils(startAddr=int(hex(i),16),quantity=int(self.options['Quantity'][0],16)),timeout=timeout, verbose=0)
-			ans = ModbusADU_Answer(str(ans))
+			ans = ModbusADU_Answer(bytes(ans))
 			self.printLine('[+] Response is :',bcolors.OKGREEN)
 			ans.show()
 
@@ -75,7 +75,7 @@ class Module:
 			c = connectToTarget(ip,self.options['RPORT'][0])
 			self.printLine('[+] Address is ' + str(hex(i)),bcolors.OKGREEN)
 			ans = c.sr1(ModbusADU(transId=getTransId(),unitId=int(self.options['UID'][0]))/ModbusPDU02_Read_Discrete_Inputs(startAddr=int(hex(i),16),quantity=int(self.options['Quantity'][0],16)),timeout=timeout, verbose=0)
-			ans = ModbusADU_Answer(str(ans))
+			ans = ModbusADU_Answer(bytes(ans))
 			self.printLine('[+] Response is :',bcolors.OKGREEN)
 			ans.show()		
 
@@ -84,7 +84,7 @@ class Module:
 			c = connectToTarget(ip,self.options['RPORT'][0])
 			self.printLine('[+] Address is ' + str(hex(i)),bcolors.OKGREEN)
 			ans = c.sr1(ModbusADU(transId=getTransId(),unitId=int(self.options['UID'][0]))/ModbusPDU03_Read_Holding_Registers(startAddr=int(hex(i),16),quantity=int(self.options['Quantity'][0],16)),timeout=timeout, verbose=0)
-			ans = ModbusADU_Answer(str(ans))
+			ans = ModbusADU_Answer(bytes(ans))
 			self.printLine('[+] Response is :',bcolors.OKGREEN)
 			ans.show()
 

@@ -17,8 +17,8 @@ class Module:
         }
 	options = {
 		'RHOSTS'	:[''		,True	,'The target address range or CIDR identifier'],
-		'RPORT'		:[502		,False	,'The port number for modbus protocol'],
-		'UID'		:[None		,True	,'Modbus Slave UID.'],
+		'RPORT'		:[502	,False	,'The port number for modbus protocol'],
+		'UID'		:[''		,True	,'Modbus Slave UID.'],
 		'StartAddr'	:['0x0000'	,True	,'Start Address.'],
 		'Quantity'	:['0x0001'	,True	,'Registers Values.'],
 		'Threads'	:[1		,False	,'The number of concurrent threads'],
@@ -63,7 +63,7 @@ class Module:
 			return None
 		self.printLine('[+] Connecting to ' + ip,bcolors.OKGREEN)
 		ans = c.sr1(ModbusADU(transId=getTransId(),unitId=int(self.options['UID'][0]))/ModbusPDU01_Read_Coils(startAddr=int(self.options['StartAddr'][0],16),quantity=int(self.options['Quantity'][0],16)),timeout=timeout, verbose=0)
-		ans = ModbusADU_Answer(str(ans))
+		ans = ModbusADU_Answer(bytes(ans))
 		self.printLine('[+] Response is :',bcolors.OKGREEN)
 		ans.show()
 		

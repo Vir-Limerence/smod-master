@@ -70,7 +70,7 @@ class Module:
 			os._exit(0)
 		def get_mac(ip_address):
 			ans,unasn = srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=ip_address),timeout=2,retry=10)
-			ans.res
+			# ans.res
 			return ans.res[0][1][Ether].src
 		
 		

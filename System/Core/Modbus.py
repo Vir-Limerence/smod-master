@@ -256,7 +256,7 @@ class ModbusADU(Packet):
 			XByteField("unitId", 0x00)] 	# 0xFF or 0x00 should be used for Modbus over TCP/IP
 	# Dissects packets
 	def guess_payload_class(self, payload):
-		funcCode = int(payload[0].encode("hex"),16)
+		funcCode = int(str(payload[0]),16)
 
 		if funcCode == 0x01:
 			return ModbusPDU01_Read_Coils
@@ -330,7 +330,7 @@ class ModbusADU_Answer(Packet):
 			XByteField("unitId", 0x01)] 	# 0xFF or 0x00 should be used for Modbus over TCP/IP
 	# Dissects packets
 	def guess_payload_class(self, payload):
-		funcCode = int(payload[0].encode("hex"),16)
+		funcCode = int(str(payload[0]),16)
 
 		if funcCode == 0x01:
 			return ModbusPDU01_Read_Coils_Answer
@@ -439,10 +439,10 @@ def getSupportedFunctionCodes(c):
 		# We are using the raw data format, because not all function
 		# codes are supported out by this library.
 		if ans:
-			data = str(ans)
-			data2 = data.encode('hex')
-			returnCode = int(data2[14:16],16)
-			exceptionCode = int(data2[17:18],16)
+			data = bytes(ans)
+			data2 = data
+			returnCode = int(str(data2[14:16]),16)
+			exceptionCode = int(str(data2[17:18]),16)
 
 			if returnCode > 127 and exceptionCode == 0x01:
 				# If return function code is > 128 --> error code
@@ -469,15 +469,15 @@ def getSupportedDiagnostics(c):
 
 	print("Looking for supported diagnostics codes..")
 	for i in range(0,65535): # Total of 65535, function code 8, sub-function code is 2 bytes long
-		ans = connection.sr1(ModbusADU(transId=getTransId())/Raw("\x08")/struct.pack(">H",i)/Raw("\x00\x00"),timeout=timeout, verbose=0)
+		ans = connection.sr1(ModbusADU(transId=getTransId())/Raw(b"\x08")/struct.pack(">H",i)/Raw(b"\x00\x00"),timeout=timeout, verbose=0)
 
 		# We are using the raw data format, because not all function
 		# codes are supported by this library.
 		if ans:
-			data = str(ans)
-			data2 = data.encode('hex')
-			returnCode = int(data2[14:16],16)
-			exceptionCode = int(data2[17:18],16)
+			data = bytes(ans)
+			data2 = data
+			returnCode = int(str(data2[14:16]),16)
+			exceptionCode = int(str(data2[17:18]),16)
 
 			if returnCode > 127 and exceptionCode == 0x01:
 				# If return function code is > 128 --> error code

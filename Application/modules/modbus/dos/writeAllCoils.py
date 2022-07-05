@@ -69,7 +69,7 @@ class Module:
 			try:
 				self.printLine('[+] Write on Address ' + str(int(hex(i|0x1111),16)),bcolors.OKGREEN)
 				ans = c.sr1(ModbusADU(transId=getTransId(),unitId=int(self.options['UID'][0]))/ModbusPDU05_Write_Single_Coil(outputAddr=int(hex(i|0x1111),16),outputValue=int('0x0000',16)),timeout=timeout, verbose=0)
-				ans = ModbusADU_Answer(str(ans))
+				ans = ModbusADU_Answer(bytes(ans))
 				self.printLine('[+] Response is :',bcolors.OKGREEN)
 				ans.show()
 			except:

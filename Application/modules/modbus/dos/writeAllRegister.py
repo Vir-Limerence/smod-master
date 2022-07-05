@@ -67,7 +67,7 @@ class Module:
 			try:
 				self.printLine('[+] Write on Register Address ' + str(int(hex(i|0x1111),16)),bcolors.OKGREEN)
 				ans = c.sr1(ModbusADU(transId=getTransId(),unitId=int(self.options['UID'][0]))/ModbusPDU06_Write_Single_Register(registerAddr=int(hex(i|0x1111),16),registerValue=int(hex(random.randint(0,16**4-1)|0x1111),16)),timeout=timeout, verbose=0)
-				ans = ModbusADU_Answer(str(ans))
+				ans = ModbusADU_Answer(bytes(ans))
 				self.printLine('[+] Response is :',bcolors.OKGREEN)
 				ans.show()
 			except:
