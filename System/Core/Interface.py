@@ -47,7 +47,7 @@ class Command:
 			table.align  = 'l'
 			table.add_row(['-'*7,'-'*11])
 			for i in sorted(modules):
-				print(modules[i])
+				#print(modules[i])
 				table.add_row([bcolors.OKBLUE + i + bcolors.ENDC,modules[i].info['Description']])
 
 			print(table)
