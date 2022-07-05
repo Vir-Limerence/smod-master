@@ -1,6 +1,6 @@
 # 注明
 本仓库是基于原有仓库smater-smod的改动，我们可以在python3下运行该仓库
-2022.7.4的修改记录
+## 2022.7.4的修改记录
 1.修改python2到python3的一些语法改动，如print
 2.更换了lib下的scapy和ipcalc文件为py3版本
 3.更换了loader中的imp为importlib
@@ -8,9 +8,10 @@
 ```spec = importlib.util.spec_from_file_location(name, self.path + item + '.py')
             the_api = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(the_api)
-            self.modules.update({item:the_api.Module()})```
+            self.modules.update({item:the_api.Module()})
+```
 
-2022.7.5修改记录
+## 2022.7.5修改记录
 
 1. 修改函数中的str(ans)为bytes(ans)，并且修改modbus中的str用法
 2. 如果出现scapy的模块找不到，请删除本机的scapy库
