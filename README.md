@@ -16,7 +16,9 @@
 1. 修改函数中的str(ans)为bytes(ans)，并且修改modbus中的str用法
 2. 如果出现scapy的模块找不到，请删除本机的scapy库
 
-
+## 2022.7.6记录
+1. 修改了一些格式问题
+2. 增加了一些模块用于测试
 
 # smod
 smod is a modular framework with every kind of diagnostic and offensive feature you could need in order to pentest modbus protocol. It is a full Modbus protocol implementation using Python and Scapy. This software could be run on Linux/OSX under python 2.7.x. 
