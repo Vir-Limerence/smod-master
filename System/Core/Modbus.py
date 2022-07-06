@@ -482,7 +482,8 @@ def getSupportedDiagnostics(c):
 			if returnCode > 127 and exceptionCode == 0x01:
 				# If return function code is > 128 --> error code
 				#print("Function Code "+str(i)+" not supported.")
-				a=1
+				# a =1
+				pass
 			else:
 				supportedDiagnostics.append(i)
 				print("Diagnostics Code "+str(i)+" is supported.")

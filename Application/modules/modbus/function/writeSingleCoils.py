@@ -12,15 +12,17 @@ class Module:
 	info = {
 		'Name': 'Write Single Coil',
 		'Author': ['@enddo'],
-		'Description': ("Fuzzing Write Single Coil Function"),
+		'Description': "Fuzzing Write Single Coil Function",
 
-        }
+    }
+
+
 	options = {
 		'RHOSTS'	:[''		,True	,'The target address range or CIDR identifier'],
 		'RPORT'		:[502		,False	,'The port number for modbus protocol'],
 		'UID'		:[None		,True	,'Modbus Slave UID.'],
-		'OutputAddr'	:['0x0000'	,True	,'Output Address from 0x0000 to 0xffff.'],
-		'OutputValue'	:['0x0000'	,True	,'Value to write, 0x0000 == Off, 0xFF00 == On.'],
+		'OutputAddr':['0x0000'	,True	,'Output Address from 0x0000 to 0xffff.'],
+		'OutputValue':['0x0000'	,True	,'Value to write, 0x0000 == Off, 0xFF00 == On.'],
 		'Threads'	:[1		,False	,'The number of concurrent threads'],
 		'Output'	:[True		,False	,'The stdout save in output directory']
 	}	
@@ -68,5 +70,3 @@ class Module:
 		ans.show()
 		
 				
-
-		
