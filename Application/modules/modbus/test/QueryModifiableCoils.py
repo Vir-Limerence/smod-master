@@ -73,13 +73,13 @@ class Module:
             print(str)
 
     def do(self, ip):
+        c = connectToTarget(ip, self.options["RPORT"][0])
+        if c is None:
+            self.printLine("[-] Modbus is not running on : " + ip, bcolors.WARNING)
+            return None
+        self.printLine("[+] Connecting to " + ip, bcolors.OKGREEN)
+        print(f"Address {hex(i)} ".center(20, "#"))
         for i in range(0x0000, 0x0050, int(self.options["Quantity"][0], 16)):
-            c = connectToTarget(ip, self.options["RPORT"][0])
-            if c is None:
-                self.printLine("[-] Modbus is not running on : " + ip, bcolors.WARNING)
-                return None
-            self.printLine("[+] Connecting to " + ip, bcolors.OKGREEN)
-            print(f"Address {hex(i)} ".center(20, "#"))
             # 先写入0x0000
             ans = c.sr1(
                 ModbusADU(transId=getTransId(), unitId=int(self.options["UID"][0]))
