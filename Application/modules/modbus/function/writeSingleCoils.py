@@ -82,5 +82,5 @@ class Module:
             verbose=0,
         )
         ans = ModbusADU_Answer(bytes(ans))
-        self.printLine(f'[+] Response is :{ans.__str__}',bcolors.OKGREEN)
+        self.printLine(f"[+] Response is :{ans.__str__}", bcolors.OKGREEN)
         ans.show()

@@ -86,6 +86,6 @@ class Module:
             fl += "{:08b}".format(i)
         fl = int(fl, 2)
         fl = struct.unpack("f", struct.pack("i", fl))[0]
-        self.printLine(f'[+] Response is :{ans.__str__}',bcolors.OKGREEN)
+        self.printLine(f"[+] Response is :{ans.__str__}", bcolors.OKGREEN)
         ans.show()
         print(f"    registerVal={fl}")

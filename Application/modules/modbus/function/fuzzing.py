@@ -84,7 +84,7 @@ class Module:
                 verbose=0,
             )
             ans = ModbusADU_Answer(bytes(ans))
-            self.printLine(f'[+] Response is :{ans.__str__}',bcolors.OKGREEN)
+            self.printLine(f"[+] Response is :{ans.__str__}", bcolors.OKGREEN)
             ans.show()
 
         self.printLine("[+] Fuzzing Read Discrete Inputs on " + ip, bcolors.OKGREEN)
@@ -101,7 +101,7 @@ class Module:
                 verbose=0,
             )
             ans = ModbusADU_Answer(bytes(ans))
-            self.printLine(f'[+] Response is :{ans.__str__}',bcolors.OKGREEN)
+            self.printLine(f"[+] Response is :{ans.__str__}", bcolors.OKGREEN)
             ans.show()
 
         self.printLine("[+] Fuzzing Read Holding Registers on " + ip, bcolors.OKGREEN)
@@ -118,5 +118,5 @@ class Module:
                 verbose=0,
             )
             ans = ModbusADU_Answer(bytes(ans))
-            self.printLine(f'[+] Response is :{ans.__str__}',bcolors.OKGREEN)
+            self.printLine(f"[+] Response is :{ans.__str__}", bcolors.OKGREEN)
             ans.show()

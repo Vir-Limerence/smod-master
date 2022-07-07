@@ -10,14 +10,21 @@ from System.Lib import ipcalc
 class Module:
 
     info = {
-        "Name": "Discrete Inputs Exception Function",
-        "Author": ["@enddo"],
-        "Description": "Fuzzing Read Discrete Inputs Exception Function",
+        "Name": "Read Coils Function",
+        "Author": ["maqi"],
+        "Description": "Fuzzing Read Coils Function",
     }
     options = {
-        "RHOSTS": ["", True, "The target address range or CIDR identifier"],
-        "RPORT": [502, False, "The port number for modbus protocol"],
-        "UID": ["", True, "Modbus Slave UID."],
+        "RHOSTS": [
+            "192.168.233.74",
+            True,
+            "The target address range or CIDR identifier",
+        ],
+        "RPORT": [21502, False, "The port number for modbus protocol"],
+        "UID": ["1", True, "Modbus Slave UID."],
+        "StartAddr": ["0x0000", True, "Start Address."],
+        "EndAddr": ["0x004f", True, "End Address."],
+        "Quantity": ["0x0001", True, "Registers Values."],
         "Threads": [1, False, "The number of concurrent threads"],
         "Output": [True, False, "The stdout save in output directory"],
     }
@@ -69,12 +76,19 @@ class Module:
             self.printLine("[-] Modbus is not running on : " + ip, bcolors.WARNING)
             return None
         self.printLine("[+] Connecting to " + ip, bcolors.OKGREEN)
-        ans = c.sr1(
-            ModbusADU(transId=getTransId(), unitId=int(self.options["UID"][0]))
-            / ModbusPDU02_Read_Discrete_Inputs_Exception(),
-            timeout=timeout,
-            verbose=0,
-        )
-        ans = ModbusADU_Answer(bytes(ans))
-        self.printLine(f"[+] Response is :{ans.__str__}", bcolors.OKGREEN)
-        ans.show()
+        for i in range(
+            int(self.options["StartAddress"][0], 16),
+            int(self.options["EndAddress"][0], 16) + 1,
+        ):
+            ans = c.sr1(
+                ModbusADU(transId=getTransId(), unitId=int(self.options["UID"][0]))
+                / ModbusPDU01_Read_Coils(
+                    startAddr=int(hex(i), 16),
+                    quantity=int(self.options["Quantity"][0], 16),
+                ),
+                timeout=timeout,
+                verbose=0,
+            )
+            ans = ModbusADU_Answer(bytes(ans))
+            self.printLine(f"[+] Response is :{ans.__str__}", bcolors.OKGREEN)
+            ans.show()

@@ -16,7 +16,11 @@ class Module:
     }
 
     options = {
-        "RHOSTS": ["192.168.233.74", True, "The target address range or CIDR identifier"],
+        "RHOSTS": [
+            "192.168.233.74",
+            True,
+            "The target address range or CIDR identifier",
+        ],
         "RPORT": [21502, False, "The port number for modbus protocol"],
         "UID": [1, True, "Modbus Slave UID."],
         "OutputAddr": ["0x004f", True, "Output Address from 0x0000 to 0xffff."],
@@ -82,5 +86,5 @@ class Module:
             verbose=0,
         )
         ans = ModbusADU_Answer(bytes(ans))
-        self.printLine(f'[+] Response is :{ans.__str__}',bcolors.OKGREEN)
+        self.printLine(f"[+] Response is :{ans.__str__}", bcolors.OKGREEN)
         ans.show()

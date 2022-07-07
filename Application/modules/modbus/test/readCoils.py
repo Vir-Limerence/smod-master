@@ -15,7 +15,11 @@ class Module:
         "Description": "Fuzzing Read Coils Function",
     }
     options = {
-        "RHOSTS": ["192.168.233.74", True, "The target address range or CIDR identifier"],
+        "RHOSTS": [
+            "192.168.233.74",
+            True,
+            "The target address range or CIDR identifier",
+        ],
         "RPORT": [21502, False, "The port number for modbus protocol"],
         "UID": ["1", True, "Modbus Slave UID."],
         "StartAddr": ["0x004f", True, "Start Address."],
@@ -81,5 +85,5 @@ class Module:
             verbose=0,
         )
         ans = ModbusADU_Answer(bytes(ans))
-        self.printLine(f'[+] Response is :{ans.__str__}',bcolors.OKGREEN)
+        self.printLine(f"[+] Response is :{ans.__str__}", bcolors.OKGREEN)
         ans.show()
