@@ -14,9 +14,9 @@ class Module:
         "Description": "Fuzzing Write All Coil Function, off all coils",
     }
     options = {
-        "RHOSTS": ["", True, "The target address range or CIDR identifier"],
-        "RPORT": [502, False, "The port number for modbus protocol"],
-        "UID": [None, True, "Modbus Slave UID."],
+        "RHOSTS": ["192.168.233.74", True, "The target address range or CIDR identifier"],
+        "RPORT": [21502, False, "The port number for modbus protocol"],
+        "UID": [1, True, "Modbus Slave UID."],
         "StartAddress": ["0x0000", True, "The start address"],
         "EndAddress": ["0xffff", True, "The End address"],
         "OutputValue": ["0x0000", True, "Value to write, 0x0000 == Off, 0xFF00 == On."],

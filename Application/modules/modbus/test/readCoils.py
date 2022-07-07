@@ -15,10 +15,10 @@ class Module:
         "Description": "Fuzzing Read Coils Function",
     }
     options = {
-        "RHOSTS": ["", True, "The target address range or CIDR identifier"],
-        "RPORT": [502, False, "The port number for modbus protocol"],
-        "UID": ["", True, "Modbus Slave UID."],
-        "StartAddr": ["0x0000", True, "Start Address."],
+        "RHOSTS": ["192.168.233.74", True, "The target address range or CIDR identifier"],
+        "RPORT": [21502, False, "The port number for modbus protocol"],
+        "UID": ["1", True, "Modbus Slave UID."],
+        "StartAddr": ["0x004f", True, "Start Address."],
         "Quantity": ["0x0001", True, "Registers Values."],
         "Threads": [1, False, "The number of concurrent threads"],
         "Output": [True, False, "The stdout save in output directory"],

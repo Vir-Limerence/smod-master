@@ -16,11 +16,11 @@ class Module:
     }
 
     options = {
-        "RHOSTS": ["", True, "The target address range or CIDR identifier"],
-        "RPORT": [502, False, "The port number for modbus protocol"],
-        "UID": [None, True, "Modbus Slave UID."],
-        "OutputAddr": ["0x0000", True, "Output Address from 0x0000 to 0xffff."],
-        "OutputValue": ["0x0000", True, "Value to write, 0x0000 == Off, 0xFF00 == On."],
+        "RHOSTS": ["192.168.233.74", True, "The target address range or CIDR identifier"],
+        "RPORT": [21502, False, "The port number for modbus protocol"],
+        "UID": [1, True, "Modbus Slave UID."],
+        "OutputAddr": ["0x004f", True, "Output Address from 0x0000 to 0xffff."],
+        "OutputValue": ["0xff00", True, "Value to write, 0x0000 == Off, 0xFF00 == On."],
         "Threads": [1, False, "The number of concurrent threads"],
         "Output": [True, False, "The stdout save in output directory"],
     }
