@@ -6,6 +6,7 @@ from System.Core.Global import *
 from System.Core.Colors import *
 from System.Core.Modbus import *
 from System.Lib import ipcalc
+import math
 
 
 class Module:
@@ -71,12 +72,12 @@ class Module:
             self.printLine("[-] Modbus is not running on : " + ip, bcolors.WARNING)
             return None
         self.printLine("[+] Connecting to " + ip, bcolors.OKGREEN)
-        for i in range(0x0800, 0x09f2, int(self.options["Quantity"][0], 16)):
-            # 读两个寄存器
+        for i in range(0x08d8, 0x09f2, int(self.options["Quantity"][0], 16)):
+            # 读寄存器
             ans = c.sr1(
                 ModbusADU(transId=getTransId(), unitId=int(self.options["UID"][0]))
                 / ModbusPDU03_Read_Holding_Registers(
-                    startAddr=int(self.options["StartAddr"][0], 16),
+                    startAddr=int(hex(i), 16),
                     quantity=int(self.options["Quantity"][0], 16),
                 ),
                 timeout=timeout,
@@ -84,25 +85,28 @@ class Module:
             )
             ans = ModbusADU_Answer(bytes(ans))
             read_1 = struct.unpack('>f', bytes(ans)[-4:])[0]
-            # 写两个寄存器
+            # 写寄存器
             write_1 = read_1 + 1
+            s = bytes(struct.pack('>f', write_1))
+            s = [hex(i) for i in bytes(s)]
+            s = [int(i, 16) for i in s]
             ans = c.sr1(
                 ModbusADU(transId=getTransId(), unitId=int(self.options["UID"][0]))
                 / ModbusPDU10_Write_Multiple_Registers(
-                    startAddr=int(self.options["StartAddr"][0], 16),
-                    quantity=int(self.options["Quantity"][0], 16),
-                    outputsValue=struct.pack('>f', write_1)
+                    startingAddr=int(hex(i), 16),
+                    quantityRegisters=int(self.options["Quantity"][0], 16),
+                    outputsValue=s
                 ),
                 timeout=timeout,
                 verbose=0,
             )
             ans = ModbusADU_Answer(bytes(ans))
-            sleep(2)
-            # 读两个寄存器
+            sleep(0.2)
+            # 读寄存器
             ans = c.sr1(
                 ModbusADU(transId=getTransId(), unitId=int(self.options["UID"][0]))
                 / ModbusPDU03_Read_Holding_Registers(
-                    startAddr=int(self.options["StartAddr"][0], 16),
+                    startAddr=int(hex(i), 16),
                     quantity=int(self.options["Quantity"][0], 16),
                 ),
                 timeout=timeout,
@@ -111,8 +115,8 @@ class Module:
             ans = ModbusADU_Answer(bytes(ans))
             read_2 = struct.unpack('>f', bytes(ans)[-4:])[0]
             print(f'read_1:{read_1},read_2:{read_2}')
-            if write_1 == read_2:
+            if math.fabs(write_1 - read_2) < 1e-6:
                 print(f"{hex(i)} address can be modifiable!")
                 self.address.append(hex(i))
-            print(self.address)
-            self.address.clear()
+        print(self.address)
+        self.address.clear()
