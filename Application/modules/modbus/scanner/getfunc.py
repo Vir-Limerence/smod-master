@@ -82,10 +82,10 @@ class Module:
             # We are using the raw data format, because not all function
             # codes are supported out by this library.
             if ans:
-                data = str(ans)
-                data2 = data.encode("hex")
-                returnCode = int(data2[14:16], 16)
-                exceptionCode = int(data2[17:18], 16)
+                data = bytes(ans)
+                data2 = [hex(i)[2:] for i in data]
+                returnCode = int(data2[-2], 16)
+                exceptionCode = int(data2[-1], 16)
 
                 if returnCode > 127 and exceptionCode == 0x01:
                     # If return function code is > 128 --> error code

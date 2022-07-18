@@ -610,9 +610,9 @@ def getSupportedFunctionCodes(c):
         # codes are supported out by this library.
         if ans:
             data = bytes(ans)
-            data2 = data
-            returnCode = int(str(data2[14:16]), 16)
-            exceptionCode = int(str(data2[17:18]), 16)
+            data2 = [hex(i)[2:] for i in data]
+            returnCode = int(data2[-2], 16)
+            exceptionCode = int(data2[-1], 16)
 
             if returnCode > 127 and exceptionCode == 0x01:
                 # If return function code is > 128 --> error code
@@ -660,9 +660,9 @@ def getSupportedDiagnostics(c):
         # codes are supported by this library.
         if ans:
             data = bytes(ans)
-            data2 = data
-            returnCode = int(str(data2[14:16]), 16)
-            exceptionCode = int(str(data2[17:18]), 16)
+            data2 = [hex(i)[2:] for i in data]
+            returnCode = int(data2[-2], 16)
+            exceptionCode = int(data2[-1], 16)
 
             if returnCode > 127 and exceptionCode == 0x01:
                 # If return function code is > 128 --> error code

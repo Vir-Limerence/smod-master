@@ -1,3 +1,6 @@
+
+
+
 import os
 import threading
 
@@ -81,5 +84,8 @@ class Module:
             verbose=0,
         )
         ans = ModbusADU_Answer(bytes(ans))
-        self.printLine(f"[+] Response is :{ans.__str__}", bcolors.OKGREEN)
+        self.printLine(f"[+] Response is :", bcolors.OKGREEN)
         ans.show()
+        s = bytes(ans)[9:]
+        s = ''.join([bin(int(hex(i), 16))[2:].zfill(8)[::-1] for i in s])
+        print(f"Coils status is {s}")
